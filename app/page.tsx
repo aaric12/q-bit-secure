@@ -1,9 +1,10 @@
-import Link from "next/link"
-import { ArrowRight } from "lucide-react"
+import Link from "next/link";
+import { ArrowRight } from "lucide-react";
 
-import { Button } from "@/components/ui/button"
-import { HeroSection } from "@/components/hero-section"
-import { TeamSection } from "@/components/team-section"
+import { Button } from "@/components/ui/button";
+import { HeroSection } from "@/components/hero-section";
+import { TeamSection } from "@/components/team-section";
+import AddUser from "@/components/AddUser"; // Importing the Firebase AddUser component
 
 export default function Home() {
   return (
@@ -30,11 +31,16 @@ export default function Home() {
                 <Link href="/info">Learn More</Link>
               </Button>
             </div>
+
+            {/* Add User Button for Firebase */}
+            <div className="mt-8">
+              <AddUser />
+            </div>
+
           </div>
         </section>
         <TeamSection />
       </main>
     </div>
-  )
+  );
 }
-
