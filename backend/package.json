@@ -1,0 +1,24 @@
+{
+  "name": "qbit-secure-backend",
+  "version": "1.0.0",
+  "description": "Backend for QBit Secure quantum security platform",
+  "main": "api/index.ts",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start"
+  },
+  "dependencies": {
+    "@neondatabase/serverless": "^0.6.0",
+    "bcryptjs": "^2.4.3",
+    "drizzle-orm": "^0.28.5",
+    "jsonwebtoken": "^9.0.2",
+    "next": "^14.0.0"
+  },
+  "devDependencies": {
+    "@types/bcryptjs": "^2.4.4",
+    "@types/jsonwebtoken": "^9.0.3",
+    "@types/node": "^20.8.6",
+    "typescript": "^5.2.2"
+  }
+}

@@ -1,0 +1,113 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           Int            @id @default(autoincrement())
+  name         String
+  email        String         @unique
+  passwordHash String
+  createdAt    DateTime       @default(now()) @map("created_at")
+  updatedAt    DateTime       @updatedAt @map("updated_at")
+  sessions     Session[]
+  securityLogs SecurityLog[]
+  simulations  Simulation[]
+  quantumKeys  QuantumKey[]
+
+  @@map("users")
+}
+
+model Session {
+  id        Int      @id @default(autoincrement())
+  userId    Int      @map("user_id")
+  token     String   @unique
+  expiresAt DateTime @map("expires_at")
+  createdAt DateTime @default(now()) @map("created_at")
+  user      User     @relation(fields: [userId], references: [id])
+
+  @@map("sessions")
+}
+
+model SecurityLog {
+  id          Int       @id @default(autoincrement())
+  userId      Int?      @map("user_id")
+  eventType   String    @map("event_type")
+  description String
+  severity    String
+  timestamp   DateTime  @default(now())
+  ipAddress   String?   @map("ip_address")
+  metadata    Json?
+  user        User?     @relation(fields: [userId], references: [id])
+
+  @@map("security_logs")
+}
+
+model Simulation {
+  id            Int      @id @default(autoincrement())
+  userId        Int      @map("user_id")
+  protocol      String
+  numQubits     Int      @map("num_qubits")
+  keyGenerated  String?  @map("key_generated")
+  entropy       Float?
+  qber          Float?
+  executionTime Float?   @map("execution_time")
+  timestamp     DateTime @default(now())
+  parameters    Json?
+  user          User     @relation(fields: [userId], references: [id])
+
+  @@map("simulation_results")
+}
+
+model AnalyticsData {
+  id                 Int      @id @default(autoincrement())
+  date               DateTime
+  securityScore      Int      @map("security_score")
+  encryptionStrength Int      @map("encryption_strength")
+  threatIndex        Int      @map("threat_index")
+  keyExchanges       Int      @map("key_exchanges")
+  activeConnections  Int      @map("active_connections")
+  dataTransferred    BigInt   @map("data_transferred")
+  metadata           Json?
+
+  @@map("analytics_data")
+}
+
+model DashboardMetric {
+  id                   Int       @id @default(autoincrement())
+  timestamp            DateTime  @default(now())
+  networkStatus        String    @map("network_status")
+  activeConnections    Int       @map("active_connections")
+  dataTransferred      BigInt    @map("data_transferred")
+  lastKeyExchange      DateTime? @map("last_key_exchange")
+  encryptionMethod     String    @map("encryption_method")
+  keyLength            Int       @map("key_length")
+  keyRefreshRate       Int       @map("key_refresh_rate")
+  encryptionStrength   Int       @map("encryption_strength")
+  connectivityScore    Int       @map("connectivity_score")
+  latencyMs            Int       @map("latency_ms")
+  packetLoss           Float     @map("packet_loss")
+  threatDetectionScore Int       @map("threat_detection_score")
+
+  @@map("dashboard_metrics")
+}
+
+model QuantumKey {
+  id        Int       @id @default(autoincrement())
+  userId    Int       @map("user_id")
+  keyData   String    @map("key_data")
+  protocol  String
+  createdAt DateTime  @default(now()) @map("created_at")
+  expiresAt DateTime? @map("expires_at")
+  isActive  Boolean   @default(true) @map("is_active")
+  user      User      @relation(fields: [userId], references: [id])
+
+  @@map("quantum_keys")
+}
